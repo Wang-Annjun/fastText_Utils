@@ -117,6 +117,19 @@ class ft_train_Util(object):
         return avg_precision, avg_recall
 
 if __name__ == '__main__':
+
+    params = {
+        'lr': YOUR_lr,
+        'epoch': YOUR_epoch,
+        'wordNgrams': YOUR_wordNgrams,
+        'dim': YOUR_dim,
+        'minCount': YOUR_minCount,
+        'minn': YOUR_minn,
+        'maxn': YOUR_maxn,
+        'bucket': YOUR_bucket,
+        'loss': YOUR_loss
+    }
+
     start_time = time.time()
     csv_training_data = YOUR_FILE
     ft_train_Util().k_fold_validation(csv_training_data, YOUR_X_Label, YOUR_y_Label, k=5, **params)
