@@ -9,142 +9,143 @@ import pprint
 
 
 class ft_train_Util(object):
-    
-    @staticmethod
-    def split_train_test(data, test_ratio):
-        """
-        :param data: 训练数据[type:dataframe]
-        :param test_ratio: 测试数据的比例[type:int]
-        :return: 训练集和测试集
-        """
-        shuffled_indices = np.random.permutation(len(data))
-        test_set_size = int(len(data) * test_ratio)
-        test_indices = shuffled_indices[:test_set_size]
-        train_indices = shuffled_indices[test_set_size:]
-        return data.iloc[train_indices], data.iloc[test_indices]
 
-    @staticmethod
-    def get_structure_data(X, y, file_save_dir, file_name):
-        """
-        :param X: 训练数据[type:list]
-        :param y: 训练数据的标签[type:list]
-        :param file_save_dir: 结构化后的文件存储的文件夹路径命名[type:string]
-        :param file_name: 结构化文件的命名[type:string]
-        :return _file: 结构化后的文件[type:txt]
-        """
-        train_data = zip(X, y)
+	@staticmethod
+	def split_train_test(data, test_ratio):
+		"""
+		:param data: 训练数据[type:dataframe]
+		:param test_ratio: 测试数据的比例[type:int]
+		:return: 训练集和测试集
+		"""
+		shuffled_indices = np.random.permutation(len(data))
+		test_set_size = int(len(data) * test_ratio)
+		test_indices = shuffled_indices[:test_set_size]
+		train_indices = shuffled_indices[test_set_size:]
+		return data.iloc[train_indices], data.iloc[test_indices]
 
-        if not os.path.exists(file_save_dir): 
-            os.makedirs(file_save_dir)
+	@staticmethod
+	def get_structure_data(X, y, file_save_dir, file_name):
+		"""
+		:param X: 训练数据[type:list]
+		:param y: 训练数据的标签[type:list]
+		:param file_save_dir: 结构化后的文件存储的文件夹路径命名[type:string]
+		:param file_name: 结构化文件的命名[type:string]
+		:return _file: 结构化后的文件[type:txt]
+		"""
+		train_data = zip(X, y)
 
-        __file = file_save_dir + file_name
-        with open(__file, 'w') as f:
-            for i in train_data:
-                f.write(i[0] + ' __label__' + str(i[1]))
-                f.write('\n')
-        print('%s is generated' % __file)
-        return __file
+		if not os.path.exists(file_save_dir):
+			os.makedirs(file_save_dir)
 
-    @staticmethod
-    def train_data_prepare(train_data, X_label, y_label, file_save_dir, file_name):
-        """
-        :param train_data: 源训练数据集[type:csv]
-        :param X_label: 训练数据在源数据集的命名[type:string]
-        :param y_label: 标签在源数据集的命名[type:string]
-        :param file_save_dir: 结构化后的文件存储的文件夹路径命名[type:string]
-        :param file_name: 结构化文件的命名[type:string]
-        :return _file: 结构化后的文件[type:txt]
-        """
-        data = pd.read_csv(train_data)
-        train_X = data[X_label].tolist()
-        train_y = data[y_label].tolist()
+		__file = file_save_dir + file_name
+		with open(__file, 'w') as f:
+			for i in train_data:
+				f.write(i[0] + ' __label__' + str(i[1]))
+				f.write('\n')
+		print('%s is generated' % __file)
+		return __file
 
-        return get_structure_data(train_X, train_y, file_save_dir, file_name)
-    
-    @staticmethod
-    def fasttext_train_valid(train_X, train_y, model_dir, model_name, **kwargs):
-        """
-        :param train_X: 训练数据[type:txt]
-        :param train_y: 验证数据[type:txt]
-        :param model_dir: 模型保存的文件夹[type:string]
-        :param model_name: 模型的命名
-        :parma **kwargs: 模型训练的参数
-        :return clf, precision, recall: 返回分类器，precision表现和recall表现
-        """
-        clf = train_supervised(input=train_X, **kwargs)
-        result = clf.test(train_y)
-        precision = result[1]
-        recall = result[2]
+	@staticmethod
+	def train_data_prepare(train_data, X_label, y_label, file_save_dir, file_name):
+		"""
+		:param train_data: 源训练数据集[type:csv]
+		:param X_label: 训练数据在源数据集的命名[type:string]
+		:param y_label: 标签在源数据集的命名[type:string]
+		:param file_save_dir: 结构化后的文件存储的文件夹路径命名[type:string]
+		:param file_name: 结构化文件的命名[type:string]
+		:return _file: 结构化后的文件[type:txt]
+		"""
+		data = pd.read_csv(train_data)
+		train_X = data[X_label].tolist()
+		train_y = data[y_label].tolist()
 
-        if not os.path.exists(model_dir): 
-            os.makedirs(model_dir)
+		return get_structure_data(train_X, train_y, file_save_dir, file_name)
 
-        __model = model_dir + model_name
-        clf.save_model('%s.bin'% __model)
+	@staticmethod
+	def fasttext_train_valid(train_X, train_y, model_dir, model_name, **kwargs):
+		"""
+		:param train_X: 训练数据[type:txt]
+		:param train_y: 验证数据[type:txt]
+		:param model_dir: 模型保存的文件夹[type:string]
+		:param model_name: 模型的命名
+		:parma **kwargs: 模型训练的参数
+		:return clf, precision, recall: 返回分类器，precision表现和recall表现
+		"""
+		clf = train_supervised(input=train_X, **kwargs)
+		result = clf.test(train_y)
+		precision = result[1]
+		recall = result[2]
 
-        __record = {'train_X': train_X,
-                 'train_y': train_y,
-                 'model_path': __model,
-                 'training_parameter': kwargs,
-                 'precision': precision,
-                 'recall': recall}
-        pprint.pprint(__record, width=1)
-        return clf, precision, recall
-    
-    @staticmethod
-    def k_fold_validation(train_data, X_label, y_label, k, **kwargs):
-        """
-        :param train_data: 源训练数据集[type:csv]
-        :param X_label: 训练数据在源数据集的命名[type:string]
-        :param y_label: 标签在源数据集的命名[type:string]
-        :param k: K折交叉验证中的K设置[type:int]
-        :parma kwargs: 模型训练的参数[type:dict]
-        :return avg_precision, avg_recall: 交叉验证中的表现
-        """
-        data = pd.read_csv(train_data)
-        X = data[X_label]
-        y = data[y_label]
+		if not os.path.exists(model_dir):
+			os.makedirs(model_dir)
 
-        kf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
+		__model = model_dir + model_name
+		clf.save_model('%s.bin' % __model)
 
-        precision_collection = []
-        recall_collection = []
+		__record = {'train_X': train_X,
+					'train_y': train_y,
+					'model_path': __model,
+					'training_parameter': kwargs,
+					'precision': precision,
+					'recall': recall}
+		pprint.pprint(__record, width=1)
+		return clf, precision, recall
 
-        order = 1
-        for train_index, test_index in kf.split(X, y):
-            X_train, X_test = X[train_index], X[test_index]
-            y_train, y_test = y[train_index], y[test_index]
-            print('\n' + '-*'*10 + '%s Fold' % order + '-*'*10)
-            train_txt = get_structure_data(X_train, y_train, 'KFold_data/', 'data_%s.train' % order)
-            test_txt = get_structure_data(X_test, y_test, 'KFold_data/','data_%s.valid' % order)
-            model_name = 'model_%s' % order
-            clf, precision, recall = fasttext_train_valid(train_txt, test_txt, 'model/', model_name, **kwargs)
-            precision_collection.append(precision)
-            recall_collection.append(recall)
-            order += 1
-        avg_precision = sum(precision_collection)/k
-        avg_recall = sum(recall_collection)/k
-        print('--' * 20)
-        __record = {'avg_precision' : avg_precision,
-                   'avg_recall': avg_recall}
-        pprint.pprint(__record, width=1)
-        return avg_precision, avg_recall
+	@staticmethod
+	def k_fold_validation(train_data, X_label, y_label, k, **kwargs):
+		"""
+		:param train_data: 源训练数据集[type:csv]
+		:param X_label: 训练数据在源数据集的命名[type:string]
+		:param y_label: 标签在源数据集的命名[type:string]
+		:param k: K折交叉验证中的K设置[type:int]
+		:parma kwargs: 模型训练的参数[type:dict]
+		:return avg_precision, avg_recall: 交叉验证中的表现
+		"""
+		data = pd.read_csv(train_data)
+		X = data[X_label]
+		y = data[y_label]
+
+		kf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
+
+		precision_collection = []
+		recall_collection = []
+
+		order = 1
+		for train_index, test_index in kf.split(X, y):
+			X_train, X_test = X[train_index], X[test_index]
+			y_train, y_test = y[train_index], y[test_index]
+			print('\n' + '-*' * 10 + '%s Fold' % order + '-*' * 10)
+			train_txt = get_structure_data(X_train, y_train, 'KFold_data/', 'data_%s.train' % order)
+			test_txt = get_structure_data(X_test, y_test, 'KFold_data/', 'data_%s.valid' % order)
+			model_name = 'model_%s' % order
+			clf, precision, recall = fasttext_train_valid(train_txt, test_txt, 'model/', model_name, **kwargs)
+			precision_collection.append(precision)
+			recall_collection.append(recall)
+			order += 1
+		avg_precision = sum(precision_collection) / k
+		avg_recall = sum(recall_collection) / k
+		print('--' * 20)
+		__record = {'avg_precision': avg_precision,
+					'avg_recall': avg_recall}
+		pprint.pprint(__record, width=1)
+		return avg_precision, avg_recall
+
 
 if __name__ == '__main__':
+	params = {
+		'lr': YOUR_lr,
+		'epoch': YOUR_epoch,
+		'wordNgrams': YOUR_wordNgrams,
+		'dim': YOUR_dim,
+		'minCount': YOUR_minCount,
+		'minn': YOUR_minn,
+		'maxn': YOUR_maxn,
+		'bucket': YOUR_bucket,
+		'loss': YOUR_loss
+	}
 
-    params = {
-        'lr': YOUR_lr,
-        'epoch': YOUR_epoch,
-        'wordNgrams': YOUR_wordNgrams,
-        'dim': YOUR_dim,
-        'minCount': YOUR_minCount,
-        'minn': YOUR_minn,
-        'maxn': YOUR_maxn,
-        'bucket': YOUR_bucket,
-        'loss': YOUR_loss
-    }
-
-    start_time = time.time()
-    csv_training_data = YOUR_FILE
-    ft_train_Util().k_fold_validation(csv_training_data, YOUR_X_Label, YOUR_y_Label, k=5, **params)
-    print("----%s Running Seconds -----" % (time.time() - start_time))
+	start_time = time.time()
+	csv_training_data = YOUR_FILE
+	ft_train_Util().k_fold_validation(csv_training_data, YOUR_X_Label, YOUR_y_Label, k=5, **params)
+	print("----%s Running Seconds -----" % (time.time() - start_time))
+	print('Hi')
