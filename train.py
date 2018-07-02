@@ -1,14 +1,28 @@
 import pandas as pd
+import numpy as np
 import fastText as ft
 from fastText import train_supervised
 from sklearn.model_selection import StratifiedKFold
 import time
 import os
 import pprint
-import json
+
 
 class ft_train_Util(object):
     
+    @staticmethod
+    def split_train_test(data, test_ratio):
+        """
+        :param data: 训练数据[type:dataframe]
+        :param test_ratio: 测试数据的比例[type:int]
+        :return: 训练集和测试集
+        """
+        shuffled_indices = np.random.permutation(len(data))
+        test_set_size = int(len(data) * test_ratio)
+        test_indices = shuffled_indices[:test_set_size]
+        train_indices = shuffled_indices[test_set_size:]
+        return data.iloc[train_indices], data.iloc[test_indices]
+
     @staticmethod
     def get_structure_data(X, y, file_save_dir, file_name):
         """
