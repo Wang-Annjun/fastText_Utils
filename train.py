@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import fastText as ft
 from fastText import train_supervised
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, train_test_split
 import time
 import os
 import pprint
@@ -17,12 +17,7 @@ class ft_train_Util(object):
         :param test_ratio: 测试数据的比例[type:int]
         :return: 训练集和测试集
         """
-        np.random.seed(42)
-        shuffled_indices = np.random.permutation(len(data))
-        test_set_size = int(len(data) * test_ratio)
-        test_indices = shuffled_indices[:test_set_size]
-        train_indices = shuffled_indices[test_set_size:]
-        return data.iloc[train_indices], data.iloc[test_indices]
+        return train_test_split(data, test_size=test_ratio, random_state=42)
 
     @staticmethod
     def get_structure_data(X, y, file_save_dir, file_name):
