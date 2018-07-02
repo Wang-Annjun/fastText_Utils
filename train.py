@@ -17,6 +17,7 @@ class ft_train_Util(object):
         :param test_ratio: 测试数据的比例[type:int]
         :return: 训练集和测试集
         """
+        np.random.seed(42)
         shuffled_indices = np.random.permutation(len(data))
         test_set_size = int(len(data) * test_ratio)
         test_indices = shuffled_indices[:test_set_size]
