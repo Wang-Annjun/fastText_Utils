@@ -148,4 +148,3 @@ if __name__ == '__main__':
 	csv_training_data = YOUR_FILE
 	ft_train_Util().k_fold_validation(csv_training_data, YOUR_X_Label, YOUR_y_Label, k=5, **params)
 	print("----%s Running Seconds -----" % (time.time() - start_time))
-	print('Hi')
