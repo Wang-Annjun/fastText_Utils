@@ -104,16 +104,15 @@ def fasttext_train_valid(train_X, train_y, model_dir, model_name, **kwargs):
 
 def k_fold_validation(train_data, X_label, y_label, k, **kwargs):
     """
-    :param train_data: 源训练数据集[type:csv]
+    :param train_data: 源训练数据集[type:dataframe]
     :param X_label: 训练数据在源数据集的命名[type:string]
     :param y_label: 标签在源数据集的命名[type:string]
     :param k: K折交叉验证中的K设置[type:int]
     :parma kwargs: 模型训练的参数[type:dict]
     :return avg_precision, avg_recall: 交叉验证中的表现
     """
-    data = pd.read_csv(train_data)
-    X = data[X_label]
-    y = data[y_label]
+    X = train_data[X_label]
+    y = train_data[y_label]
 
     kf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
 
