@@ -142,8 +142,8 @@ def k_fold_validation(train_data, X_label, y_label, k, **kwargs):
 
     order = 1
     for train_index, test_index in kf.split(X, y):
-        X_train, X_test = X[train_index], X[test_index]
-        y_train, y_test = y[train_index], y[test_index]
+        X_train, X_test = X.iloc[train_index], X.iloc[test_index]
+        y_train, y_test = y.iloc[train_index], y.iloc[test_index]
         print('\n' + '-*' * 10 + '%s Fold' % order + '-*' * 10)
         train_txt = get_structure_data(X_train, y_train, 'KFold_data/', 'data_%s.train' % order)
         test_txt = get_structure_data(X_test, y_test, 'KFold_data/', 'data_%s.valid' % order)

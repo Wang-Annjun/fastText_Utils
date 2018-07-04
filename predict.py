@@ -83,8 +83,6 @@ def final_train(train_data, X_label, y_label, file_save_dir, file_name, model_di
     __model = model_dir + model_name
     clf.save_model('%s.bin'% __model)
 
-    classification_report_output(test, clf)
-
     return clf
 
 def fasttext_predict(model_path, raw_data, X_label):
