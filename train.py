@@ -2,10 +2,7 @@ import pandas as pd
 import fastText as ft
 from fastText import train_supervised
 from sklearn.model_selection import StratifiedKFold, train_test_split
-<<<<<<< HEAD
 from sklearn.metrics import classification_report
-=======
->>>>>>> ca0c200b706eab19ff249aedf840a6390beb8b9b
 import time
 import os
 import pprint
@@ -15,11 +12,12 @@ warnings.filterwarnings('ignore')
 
 def split_train_test(data, test_ratio):
     """
-    :param data: 训练数据[type:dataframe]
+    :param data: 训练数据[type:csv]
     :param test_ratio: 测试数据的比例[type:int]
     :return: 训练集和测试集
     """
-    return train_test_split(data, test_size=test_ratio, random_state=42)
+    df = pd.read_csv(data)
+    return train_test_split(df, test_size=test_ratio, random_state=42)
 
 
 def get_structure_data(X, y, file_save_dir, file_name):
@@ -68,9 +66,8 @@ def train_data_prepare(train_data, X_label, y_label, file_save_dir, file_name):
     :param file_name: 结构化文件的命名[type:string]
     :return _file: 结构化后的文件[type:txt]
     """
-    data = pd.read_csv(train_data)
-    train_X = data[X_label].tolist()
-    train_y = data[y_label].tolist()
+    train_X = train_data[X_label].tolist()
+    train_y = train_data[y_label].tolist()
 
     return get_structure_data(train_X, train_y, file_save_dir, file_name)
 
@@ -162,5 +159,13 @@ if __name__ == '__main__':
 
     start_time = time.time()
     csv_training_data = YOUR_CSV_FILE
-    k_fold_validation(csv_training_data, YOUR_X_Label, YOUR_y_Label, k=5, **params)
+    train, test = split_train_test(csv_training_data, test_ratio)
+    k_fold_validation(train, YOUR_X_Label, YOUR_y_Label, k=5, **params)
     print("----%s Running Seconds -----" % (time.time() - start_time))
+
+
+
+
+
+
+
