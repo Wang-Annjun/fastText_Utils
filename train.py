@@ -14,7 +14,7 @@ def split_train_test(data, X_label, y_label, test_ratio):
     """
     :param data: 训练数据[type:csv]
     :param X_label: X的标签[type:string]
-    :parm y_label: y的标签[type:string]
+    :param y_label: y的标签[type:string]
     :param test_ratio: 测试数据的比例[type:int]
     :return: 训练集和测试集
     """
