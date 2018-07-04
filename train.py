@@ -165,7 +165,7 @@ if __name__ == '__main__':
 
     start_time = time.time()
     csv_training_data = YOUR_CSV_FILE
-    train, test = split_train_test(csv_training_data, test_ratio)
+    train, test = split_train_test(csv_training_data, YOUR_X_Label, YOUR_Y_Label, test_ratio)
     k_fold_validation(train, YOUR_X_Label, YOUR_y_Label, k=5, **params)
     print("----%s Running Seconds -----" % (time.time() - start_time))
 
