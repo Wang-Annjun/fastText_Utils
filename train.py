@@ -10,14 +10,21 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-def split_train_test(data, test_ratio):
+def split_train_test(data, X_label, y_label, test_ratio):
     """
     :param data: 训练数据[type:csv]
+    :param X_label: X的标签[type:string]
+    :parm y_label: y的标签[type:string]
     :param test_ratio: 测试数据的比例[type:int]
     :return: 训练集和测试集
     """
     df = pd.read_csv(data)
-    return train_test_split(df, test_size=test_ratio, random_state=42)
+    X = df[X_label]
+    y = df[y_label]
+    return train_test_split(X, y, 
+                        test_size=test_ratio, 
+                        stratify=y, 
+                        random_state=42)
 
 
 def get_structure_data(X, y, file_save_dir, file_name):
