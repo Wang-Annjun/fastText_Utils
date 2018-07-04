@@ -21,10 +21,16 @@ def split_train_test(data, X_label, y_label, test_ratio):
     df = pd.read_csv(data)
     X = df[X_label]
     y = df[y_label]
-    return train_test_split(X, y, 
-                        test_size=test_ratio, 
-                        stratify=y, 
-                        random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, stratify=y, random_state=42)
+    train = pd.DataFrame({
+                'sentence': X_train,
+                'label': y_train
+            })
+    test = pd.DataFrame({
+                'sentence': X_test,
+                'label': y_test
+        })
+    return train, test
 
 
 def get_structure_data(X, y, file_save_dir, file_name):
