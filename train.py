@@ -10,6 +10,18 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
+def construct_df(X_list, y_list, X_label, y_label):
+    """
+    :param X_list: 训练数据X[type:list]
+    :param y_list: 训练数据对应的标签数据y[type:list]
+    :param X_label: 定义训练数据X的列名[type:string]
+    :param y_label: 定义标签数据y的列名[type:list]
+    """
+    return pd.DataFrame({
+        X_label: X_list,
+        y_label: y_list
+        })
+
 def split_train_test(data, X_label, y_label, test_ratio):
     """
     :param data: 训练数据[type:csv]
@@ -22,14 +34,10 @@ def split_train_test(data, X_label, y_label, test_ratio):
     X = df[X_label]
     y = df[y_label]
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_ratio, stratify=y, random_state=42)
-    train = pd.DataFrame({
-                'sentence': X_train,
-                'label': y_train
-            })
-    test = pd.DataFrame({
-                'sentence': X_test,
-                'label': y_test
-        })
+
+    train = construct_df(X_train, y_train, X_label, y_label)
+    test = construct_df(X_test, y_test, X_label, y_label)
+
     return train, test
 
 
