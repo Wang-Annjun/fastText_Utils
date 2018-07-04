@@ -59,7 +59,7 @@ def classification_report_output(test_txt, model_path):
 
 def train_data_prepare(train_data, X_label, y_label, file_save_dir, file_name):
     """
-    :param train_data: 源训练数据集[type:csv]
+    :param train_data: 源训练数据集[type:dataframe]
     :param X_label: 训练数据在源数据集的命名[type:string]
     :param y_label: 标签在源数据集的命名[type:string]
     :param file_save_dir: 结构化后的文件存储的文件夹路径命名[type:string]
